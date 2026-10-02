@@ -1,13 +1,52 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+
+import { Text } from "@/components/Themed";
+import SectionTitle from "@/components/SectionTitle";
+import ExperienceCard from "@/components/ExperienceCard";
 
 export default function AcademicaScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Experiência Acadêmica</Text>
-      <Text style={styles.text}>
-        Aqui serão exibidas as formações acadêmicas obtidas através da API.
-      </Text>
-    </View>
+    <>
+      <StatusBar style="light" />
+
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+          <Text style={styles.eyebrow}>TRAJETÓRIA</Text>
+
+          <SectionTitle
+            title="Experiência Acadêmica"
+            subtitle="Minha formação e trajetória educacional."
+          />
+        </View>
+
+        <ExperienceCard
+          type="Tecnólogo"
+          title="Sistemas para Internet"
+          institution="Universidade Católica de Pernambuco — UNICAP"
+          period="Abril de 2025 — Cursando"
+          description="Formação superior voltada ao desenvolvimento de sistemas, aplicações web e soluções digitais."
+        />
+
+        <ExperienceCard
+          type="Técnico"
+          title="Redes de Computadores"
+          institution="ETE Professor Lucilo Ávila Pessoa"
+          period="Fevereiro de 2020 — Dezembro de 2022"
+          description="Formação técnica com foco em redes de computadores, infraestrutura e fundamentos de tecnologia da informação."
+        />
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Minha formação continua em evolução com novos estudos e projetos.
+          </Text>
+        </View>
+      </ScrollView>
+    </>
   );
 }
 
@@ -15,21 +54,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#09090B",
-    justifyContent: "center",
+  },
+
+  content: {
+    paddingHorizontal: 24,
+    paddingTop: 48,
+    paddingBottom: 40,
+  },
+
+  header: {
+    marginBottom: 8,
+  },
+
+  eyebrow: {
+    color: "#8B5CF6",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+    marginBottom: 10,
+  },
+
+  footer: {
+    marginTop: 8,
     alignItems: "center",
-    padding: 24,
   },
-  title: {
-    color: "#FFFFFF",
-    fontSize: 28,
-    fontWeight: "700",
+
+  footerText: {
+    color: "#52525B",
+    fontSize: 12,
+    lineHeight: 18,
     textAlign: "center",
-    marginBottom: 12,
-  },
-  text: {
-    color: "#A1A1AA",
-    fontSize: 16,
-    textAlign: "center",
-    lineHeight: 24,
   },
 });

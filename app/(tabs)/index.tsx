@@ -1,7 +1,13 @@
-import { Linking, Image, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import {
+  Linking,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
 
-import { Text, View } from '@/components/Themed';
+import { Text, View } from "@/components/Themed";
 
 export default function HomeScreen() {
   const openLink = async (url: string) => {
@@ -21,7 +27,7 @@ export default function HomeScreen() {
           <View style={styles.imageWrapper}>
             <Image
               source={{
-                uri: 'https://avatars.githubusercontent.com/u/206948909?v=4',
+                uri: "https://avatars.githubusercontent.com/u/206948909?v=4",
               }}
               style={styles.profileImage}
             />
@@ -76,9 +82,7 @@ export default function HomeScreen() {
                 styles.socialButton,
                 pressed && styles.buttonPressed,
               ]}
-              onPress={() =>
-                openLink('https://github.com/JvCruzM')
-              }
+              onPress={() => openLink("https://github.com/JvCruzM")}
             >
               <Text style={styles.socialButtonText}>GitHub</Text>
             </Pressable>
@@ -88,9 +92,7 @@ export default function HomeScreen() {
                 styles.socialButton,
                 pressed && styles.buttonPressed,
               ]}
-              onPress={() =>
-                openLink('https://www.linkedin.com/in/jvcruzm/')
-              }
+              onPress={() => openLink("https://www.linkedin.com/in/jvcruzm/")}
             >
               <Text style={styles.socialButtonText}>LinkedIn</Text>
             </Pressable>
@@ -110,7 +112,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#09090B',
+    backgroundColor: "#09090B",
   },
 
   content: {
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   },
 
   hero: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
 
   imageWrapper: {
@@ -128,45 +130,45 @@ const styles = StyleSheet.create({
     height: 92,
     borderRadius: 46,
     padding: 3,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: "#8B5CF6",
     marginBottom: 24,
   },
 
   profileImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 46,
   },
 
   greeting: {
-    color: '#A1A1AA',
+    color: "#A1A1AA",
     fontSize: 18,
     marginBottom: 8,
   },
 
   name: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 38,
     lineHeight: 42,
-    fontWeight: '800',
+    fontWeight: "800",
   },
 
   role: {
-    color: '#8B5CF6',
+    color: "#8B5CF6",
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 18,
   },
 
   location: {
-    color: '#A1A1AA',
+    color: "#A1A1AA",
     fontSize: 15,
     marginTop: 6,
   },
 
   divider: {
     height: 1,
-    backgroundColor: '#27272A',
+    backgroundColor: "#27272A",
     marginVertical: 28,
   },
 
@@ -175,63 +177,63 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 12,
   },
 
   description: {
-    color: '#A1A1AA',
+    color: "#A1A1AA",
     fontSize: 15,
     lineHeight: 24,
   },
 
   statsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginBottom: 32,
   },
 
   statCard: {
     flex: 1,
-    backgroundColor: '#18181B',
+    backgroundColor: "#18181B",
     borderRadius: 16,
     paddingVertical: 18,
     paddingHorizontal: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   statNumber: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: "800",
     marginBottom: 4,
   },
 
   statLabel: {
-    color: '#A1A1AA',
+    color: "#A1A1AA",
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   buttonsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
 
   socialButton: {
     flex: 1,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: "#8B5CF6",
     borderRadius: 14,
     paddingVertical: 14,
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   socialButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 
   buttonPressed: {
@@ -239,13 +241,13 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 10,
   },
 
   footerText: {
-    color: '#52525B',
+    color: "#52525B",
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

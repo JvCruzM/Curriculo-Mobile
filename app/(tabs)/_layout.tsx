@@ -1,19 +1,15 @@
-import { SymbolView } from 'expo-symbols';
-import { Tabs } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { SymbolView } from "expo-symbols";
+import { Tabs } from "expo-router";
+import { StyleSheet } from "react-native";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#8B5CF6',
-        tabBarInactiveTintColor: '#71717A',
+        tabBarActiveTintColor: "#8B5CF6",
+        tabBarInactiveTintColor: "#71717A",
         tabBarStyle: styles.tabBar,
         tabBarLabelStyle: styles.tabBarLabel,
         headerShown: useClientOnlyValue(false, true),
@@ -22,13 +18,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'house.fill',
-                android: 'home',
-                web: 'home',
+                ios: "house.fill",
+                android: "home",
+                web: "home",
               }}
               tintColor={color}
               size={24}
@@ -40,13 +36,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="sobre"
         options={{
-          title: 'Sobre',
+          title: "Sobre",
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'person.fill',
-                android: 'person',
-                web: 'person',
+                ios: "person.fill",
+                android: "person",
+                web: "person",
               }}
               tintColor={color}
               size={24}
@@ -58,13 +54,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="academica"
         options={{
-          title: 'Acadêmica',
+          title: "Acadêmica",
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'graduationcap.fill',
-                android: 'school',
-                web: 'school',
+                ios: "graduationcap.fill",
+                android: "school",
+                web: "school",
               }}
               tintColor={color}
               size={24}
@@ -76,13 +72,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profissional"
         options={{
-          title: 'Profissional',
+          title: "Profissional",
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'briefcase.fill',
-                android: 'work',
-                web: 'work',
+                ios: "briefcase.fill",
+                android: "work",
+                web: "work",
               }}
               tintColor={color}
               size={24}
@@ -94,13 +90,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="projetos"
         options={{
-          title: 'Projetos',
+          title: "Projetos",
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
+                ios: "chevron.left.forwardslash.chevron.right",
+                android: "code",
+                web: "code",
               }}
               tintColor={color}
               size={24}
@@ -114,14 +110,14 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#09090B',
-    borderTopColor: '#18181B',
+    backgroundColor: "#09090B",
+    borderTopColor: "#18181B",
     height: 70,
     paddingTop: 8,
     paddingBottom: 8,
   },
   tabBarLabel: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
