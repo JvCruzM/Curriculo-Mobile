@@ -1,15 +1,50 @@
 import {
-  Linking,
+  ActivityIndicator,
   Image,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
+import { useCurriculum } from "@/context/CurriculumContext";
 
 export default function HomeScreen() {
+  const { profile, loading, error } = useCurriculum();
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <StatusBar style="light" />
+
+        <ActivityIndicator size="large" color="#8B5CF6" />
+
+        <Text style={styles.loadingText}>Carregando currículo...</Text>
+      </View>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <View style={styles.centered}>
+        <StatusBar style="light" />
+
+        <Text style={styles.errorTitle}>
+          Não foi possível carregar o currículo
+        </Text>
+
+        <Text style={styles.errorDescription}>
+          Verifique sua conexão e tente novamente.
+        </Text>
+
+        {error ? <Text style={styles.errorDetails}>{error}</Text> : null}
+      </View>
+    );
+  }
+
   const openLink = async (url: string) => {
     await Linking.openURL(url);
   };
@@ -24,51 +59,56 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.hero}>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{
-                uri: "https://avatars.githubusercontent.com/u/206948909?v=4",
-              }}
-              style={styles.profileImage}
-            />
-          </View>
+          {profile.photoUrl ? (
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: profile.photoUrl }}
+                style={styles.profileImage}
+              />
+            </View>
+          ) : null}
 
           <Text style={styles.greeting}>Olá, eu sou</Text>
 
-          <Text style={styles.name}>João Vitor</Text>
-          <Text style={styles.name}>Cruz de Menezes</Text>
+          <Text style={styles.name}>{profile.name}</Text>
 
           <Text style={styles.role}>Sistemas para Internet</Text>
 
-          <Text style={styles.location}>Recife - PE</Text>
+          {profile.location ? (
+            <Text style={styles.location}>{profile.location}</Text>
+          ) : null}
         </View>
 
         <View style={styles.divider} />
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Sobre mim</Text>
+        {profile.summary ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Sobre mim</Text>
 
-          <Text style={styles.description}>
-            Profissional com experiência nas áreas de logística e administração,
-            atualmente direcionando minha formação para Tecnologia da
-            Informação, com foco no desenvolvimento de sistemas e soluções
-            digitais.
-          </Text>
-        </View>
+            <Text style={styles.description}>{profile.summary}</Text>
+          </View>
+        ) : null}
 
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statNumber}>
+              {profile.academicExperiences.length}
+            </Text>
+
             <Text style={styles.statLabel}>Formações</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statNumber}>
+              {profile.professionalExperiences.length}
+            </Text>
+
             <Text style={styles.statLabel}>Experiências</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statNumber}>{profile.projects.length}</Text>
+
             <Text style={styles.statLabel}>Projetos</Text>
           </View>
         </View>
@@ -77,31 +117,35 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Conheça meu trabalho</Text>
 
           <View style={styles.buttonsContainer}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.socialButton,
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={() => openLink("https://github.com/JvCruzM")}
-            >
-              <Text style={styles.socialButtonText}>GitHub</Text>
-            </Pressable>
+            {profile.githubUrl ? (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.socialButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() => openLink(profile.githubUrl!)}
+              >
+                <Text style={styles.socialButtonText}>GitHub</Text>
+              </Pressable>
+            ) : null}
 
-            <Pressable
-              style={({ pressed }) => [
-                styles.socialButton,
-                pressed && styles.buttonPressed,
-              ]}
-              onPress={() => openLink("https://www.linkedin.com/in/jvcruzm/")}
-            >
-              <Text style={styles.socialButtonText}>LinkedIn</Text>
-            </Pressable>
+            {profile.linkedinUrl ? (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.socialButton,
+                  pressed && styles.buttonPressed,
+                ]}
+                onPress={() => openLink(profile.linkedinUrl!)}
+              >
+                <Text style={styles.socialButtonText}>LinkedIn</Text>
+              </Pressable>
+            ) : null}
           </View>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Portfólio desenvolvido com React Native + Expo
+            Informações carregadas da API REST do meu portfólio.
           </Text>
         </View>
       </ScrollView>
@@ -119,6 +163,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 48,
     paddingBottom: 40,
+  },
+
+  centered: {
+    flex: 1,
+    backgroundColor: "#09090B",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 32,
+  },
+
+  loadingText: {
+    color: "#A1A1AA",
+    fontSize: 14,
+    marginTop: 14,
+  },
+
+  errorTitle: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+
+  errorDescription: {
+    color: "#A1A1AA",
+    fontSize: 14,
+    lineHeight: 21,
+    textAlign: "center",
+  },
+
+  errorDetails: {
+    color: "#52525B",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 12,
   },
 
   hero: {
