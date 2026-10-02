@@ -1,6 +1,6 @@
 import { SymbolView } from 'expo-symbols';
-import { Link, Tabs } from 'expo-router';
-import { Platform, Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
+import { StyleSheet } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
@@ -12,46 +12,89 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
+        tabBarActiveTintColor: '#8B5CF6',
+        tabBarInactiveTintColor: '#71717A',
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabBarLabel,
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Home',
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
+                ios: 'house.fill',
+                android: 'home',
+                web: 'home',
               }}
               tintColor={color}
-              size={28}
+              size={24}
             />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable style={{ marginRight: 15 }}>
-                {({ pressed }) => (
-                  <SymbolView
-                    name={{ ios: 'info.circle', android: 'info', web: 'info' }}
-                    size={25}
-                    tintColor={Colors[colorScheme].text}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
           ),
         }}
       />
+
       <Tabs.Screen
-        name="two"
+        name="sobre"
         options={{
-          title: 'Tab Two',
+          title: 'Sobre',
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{
+                ios: 'person.fill',
+                android: 'person',
+                web: 'person',
+              }}
+              tintColor={color}
+              size={24}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="academica"
+        options={{
+          title: 'Acadêmica',
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{
+                ios: 'graduationcap.fill',
+                android: 'school',
+                web: 'school',
+              }}
+              tintColor={color}
+              size={24}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profissional"
+        options={{
+          title: 'Profissional',
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{
+                ios: 'briefcase.fill',
+                android: 'work',
+                web: 'work',
+              }}
+              tintColor={color}
+              size={24}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="projetos"
+        options={{
+          title: 'Projetos',
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{
@@ -60,7 +103,7 @@ export default function TabLayout() {
                 web: 'code',
               }}
               tintColor={color}
-              size={28}
+              size={24}
             />
           ),
         }}
@@ -68,3 +111,17 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: '#09090B',
+    borderTopColor: '#18181B',
+    height: 70,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  tabBarLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+});

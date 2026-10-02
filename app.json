@@ -33,6 +33,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-navigation-bar",
+        {
+          "hidden": true,
+          "style": "light"
+        }
       ]
     ],
     "experiments": {
