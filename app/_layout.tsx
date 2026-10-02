@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { NavigationBar } from "expo-navigation-bar";
+import { CurriculumProvider } from "@/context/CurriculumContext";
 
 import { useColorScheme } from "@/components/useColorScheme";
 
@@ -48,12 +49,13 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <NavigationBar hidden />
+      <CurriculumProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </CurriculumProvider>
     </ThemeProvider>
   );
 }
