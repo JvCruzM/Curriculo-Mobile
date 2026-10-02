@@ -5,6 +5,7 @@ import { Text } from "@/components/Themed";
 import SectionTitle from "@/components/SectionTitle";
 import ExperienceCard from "@/components/ExperienceCard";
 import ScreenState from "@/components/ScreenState";
+import { formatPeriod } from '@/utils/formatDate';
 
 import { useCurriculum } from "@/context/CurriculumContext";
 
@@ -66,22 +67,6 @@ export default function ProfissionalScreen() {
       </ScrollView>
     </>
   );
-}
-
-function formatPeriod(startDate: string, endDate: string | null) {
-  const start = formatDate(startDate);
-  const end = endDate ? formatDate(endDate) : "Atual";
-
-  return `${start} — ${end}`;
-}
-
-function formatDate(date: string) {
-  const parsedDate = new Date(`${date}T00:00:00`);
-
-  return parsedDate.toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric",
-  });
 }
 
 const styles = StyleSheet.create({

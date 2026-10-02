@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/Themed";
+import ScreenState from "@/components/ScreenState";
 import SectionTitle from "@/components/SectionTitle";
 import TechnologyChip from "@/components/TechnologyChip";
-import ScreenState from "@/components/ScreenState";
+import { Text } from "@/components/Themed";
+import { formatPeriod } from "@/utils/formatDate";
 
 import { useCurriculum } from "@/context/CurriculumContext";
 
@@ -122,22 +123,6 @@ export default function SobreScreen() {
       </ScrollView>
     </>
   );
-}
-
-function formatPeriod(startDate: string, endDate: string | null) {
-  const start = formatDate(startDate);
-  const end = endDate ? formatDate(endDate) : "atual";
-
-  return `${start} — ${end}`;
-}
-
-function formatDate(date: string) {
-  const parsedDate = new Date(`${date}T00:00:00`);
-
-  return parsedDate.toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric",
-  });
 }
 
 const styles = StyleSheet.create({
