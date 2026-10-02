@@ -44,6 +44,22 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "expo-navigation-bar": {
+        "style": "light",
+        "hidden": true
+      },
+      "eas": {
+        "projectId": "da0cf570-383f-4327-a55c-f312aea2029f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/da0cf570-383f-4327-a55c-f312aea2029f"
     }
   }
 }
