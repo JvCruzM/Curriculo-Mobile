@@ -8,8 +8,10 @@ import {
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { SymbolView } from "expo-symbols";
 
 import { Text } from "@/components/Themed";
+import StatCard from "@/components/StatCard";
 import { useCurriculum } from "@/context/CurriculumContext";
 
 export default function HomeScreen() {
@@ -58,94 +60,154 @@ export default function HomeScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.hero}>
-          {profile.photoUrl ? (
-            <View style={styles.imageWrapper}>
-              <Image
-                source={{ uri: profile.photoUrl }}
-                style={styles.profileImage}
-              />
+        <View style={styles.heroCard}>
+          <View style={styles.accentLine} />
+
+          <View style={styles.heroContent}>
+            {profile.photoUrl ? (
+              <View style={styles.imageWrapper}>
+                <Image
+                  source={{ uri: profile.photoUrl }}
+                  style={styles.profileImage}
+                />
+              </View>
+            ) : null}
+
+            <Text style={styles.eyebrow}>PORTFÓLIO PESSOAL</Text>
+
+            <Text style={styles.greeting}>Olá, eu sou</Text>
+
+            <Text style={styles.name}>{profile.name}</Text>
+
+            <View style={styles.roleContainer}>
+              <View style={styles.roleDot} />
+
+              <Text style={styles.role}>Sistemas para Internet</Text>
             </View>
-          ) : null}
 
-          <Text style={styles.greeting}>Olá, eu sou</Text>
+            {profile.location ? (
+              <View style={styles.locationContainer}>
+                <SymbolView
+                  name={{
+                    ios: "location.fill",
+                    android: "location_on",
+                    web: "location_on",
+                  }}
+                  tintColor="#71717A"
+                  size={16}
+                />
 
-          <Text style={styles.name}>{profile.name}</Text>
-
-          <Text style={styles.role}>Sistemas para Internet</Text>
-
-          {profile.location ? (
-            <Text style={styles.location}>{profile.location}</Text>
-          ) : null}
+                <Text style={styles.location}>{profile.location}</Text>
+              </View>
+            ) : null}
+          </View>
         </View>
 
-        <View style={styles.divider} />
+        <View style={styles.socialSection}>
+          {profile.githubUrl ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.socialButton,
+                pressed && styles.buttonPressed,
+              ]}
+              onPress={() => openLink(profile.githubUrl!)}
+            >
+              <SymbolView
+                name={{
+                  ios: "chevron.left.forwardslash.chevron.right",
+                  android: "code",
+                  web: "code",
+                }}
+                tintColor="#FFFFFF"
+                size={18}
+              />
+
+              <Text style={styles.socialButtonText}>GitHub</Text>
+            </Pressable>
+          ) : null}
+
+          {profile.linkedinUrl ? (
+            <Pressable
+              style={({ pressed }) => [
+                styles.socialButton,
+                styles.linkedinButton,
+                pressed && styles.buttonPressed,
+              ]}
+              onPress={() => openLink(profile.linkedinUrl!)}
+            >
+              <SymbolView
+                name={{
+                  ios: "person.crop.square.fill",
+                  android: "person",
+                  web: "person",
+                }}
+                tintColor="#FFFFFF"
+                size={18}
+              />
+
+              <Text style={styles.socialButtonText}>LinkedIn</Text>
+            </Pressable>
+          ) : null}
+        </View>
 
         {profile.summary ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Sobre mim</Text>
+            <Text style={styles.sectionEyebrow}>SOBRE MIM</Text>
 
-            <Text style={styles.description}>{profile.summary}</Text>
+            <Text style={styles.sectionTitle}>Minha trajetória</Text>
+
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryText}>{profile.summary}</Text>
+            </View>
           </View>
         ) : null}
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>
-              {profile.academicExperiences.length}
-            </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionEyebrow}>EM NÚMEROS</Text>
 
-            <Text style={styles.statLabel}>Formações</Text>
-          </View>
+          <Text style={styles.sectionTitle}>Minha trajetória</Text>
 
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>
-              {profile.professionalExperiences.length}
-            </Text>
+          <View style={styles.statsContainer}>
+            <StatCard
+              value={profile.academicExperiences.length}
+              label="Formações"
+            />
 
-            <Text style={styles.statLabel}>Experiências</Text>
-          </View>
+            <StatCard
+              value={profile.professionalExperiences.length}
+              label="Experiências"
+            />
 
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{profile.projects.length}</Text>
-
-            <Text style={styles.statLabel}>Projetos</Text>
+            <StatCard value={profile.projects.length} label="Projetos" />
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Conheça meu trabalho</Text>
+        <View style={styles.bottomCard}>
+          <View style={styles.bottomIcon}>
+            <SymbolView
+              name={{
+                ios: "swift",
+                android: "code",
+                web: "code",
+              }}
+              tintColor="#FFFFFF"
+              size={20}
+            />
+          </View>
 
-          <View style={styles.buttonsContainer}>
-            {profile.githubUrl ? (
-              <Pressable
-                style={({ pressed }) => [
-                  styles.socialButton,
-                  pressed && styles.buttonPressed,
-                ]}
-                onPress={() => openLink(profile.githubUrl!)}
-              >
-                <Text style={styles.socialButtonText}>GitHub</Text>
-              </Pressable>
-            ) : null}
+          <View style={styles.bottomContent}>
+            <Text style={styles.bottomTitle}>Desenvolvedor em formação</Text>
 
-            {profile.linkedinUrl ? (
-              <Pressable
-                style={({ pressed }) => [
-                  styles.socialButton,
-                  pressed && styles.buttonPressed,
-                ]}
-                onPress={() => openLink(profile.linkedinUrl!)}
-              >
-                <Text style={styles.socialButtonText}>LinkedIn</Text>
-              </Pressable>
-            ) : null}
+            <Text style={styles.bottomText}>
+              Estudando tecnologia, criando projetos e transformando aprendizado
+              em soluções digitais.
+            </Text>
           </View>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Informações carregadas da API REST do meu portfólio.
+            Dados carregados da minha API REST.
           </Text>
         </View>
       </ScrollView>
@@ -160,8 +222,8 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingHorizontal: 24,
-    paddingTop: 48,
+    paddingHorizontal: 20,
+    paddingTop: 28,
     paddingBottom: 40,
   },
 
@@ -197,73 +259,160 @@ const styles = StyleSheet.create({
   errorDetails: {
     color: "#52525B",
     fontSize: 12,
+    lineHeight: 18,
     textAlign: "center",
     marginTop: 12,
   },
 
-  hero: {
-    alignItems: "flex-start",
+  heroCard: {
+    flexDirection: "row",
+    backgroundColor: "#18181B",
+    borderWidth: 1,
+    borderColor: "#27272A",
+    borderRadius: 24,
+    overflow: "hidden",
+    marginBottom: 14,
+  },
+
+  accentLine: {
+    width: 5,
+    backgroundColor: "#8B5CF6",
+  },
+
+  heroContent: {
+    flex: 1,
+    padding: 22,
   },
 
   imageWrapper: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
     padding: 3,
     backgroundColor: "#8B5CF6",
-    marginBottom: 24,
+    marginBottom: 18,
   },
 
   profileImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 46,
+    borderRadius: 44,
+  },
+
+  eyebrow: {
+    color: "#8B5CF6",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.6,
+    marginBottom: 7,
   },
 
   greeting: {
-    color: "#A1A1AA",
-    fontSize: 18,
-    marginBottom: 8,
+    color: "#71717A",
+    fontSize: 16,
+    marginBottom: 5,
   },
 
   name: {
     color: "#FFFFFF",
-    fontSize: 38,
-    lineHeight: 42,
+    fontSize: 34,
+    lineHeight: 39,
     fontWeight: "800",
   },
 
+  roleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 16,
+  },
+
+  roleDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#8B5CF6",
+    marginRight: 8,
+  },
+
   role: {
-    color: "#8B5CF6",
-    fontSize: 18,
-    fontWeight: "700",
-    marginTop: 18,
+    color: "#D4D4D8",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 9,
   },
 
   location: {
-    color: "#A1A1AA",
-    fontSize: 15,
-    marginTop: 6,
+    color: "#71717A",
+    fontSize: 13,
+    marginLeft: 6,
   },
 
-  divider: {
-    height: 1,
+  socialSection: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 34,
+  },
+
+  socialButton: {
+    flex: 1,
+    minHeight: 48,
+    backgroundColor: "#8B5CF6",
+    borderRadius: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+
+  linkedinButton: {
     backgroundColor: "#27272A",
-    marginVertical: 28,
+    borderWidth: 1,
+    borderColor: "#3F3F46",
+  },
+
+  socialButtonText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "700",
+  },
+
+  buttonPressed: {
+    opacity: 0.7,
   },
 
   section: {
-    marginBottom: 28,
+    marginBottom: 30,
+  },
+
+  sectionEyebrow: {
+    color: "#8B5CF6",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+    marginBottom: 5,
   },
 
   sectionTitle: {
     color: "#FFFFFF",
     fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 12,
+    fontWeight: "800",
+    marginBottom: 14,
   },
 
-  description: {
+  summaryCard: {
+    backgroundColor: "#121214",
+    borderWidth: 1,
+    borderColor: "#27272A",
+    borderRadius: 18,
+    padding: 18,
+  },
+
+  summaryText: {
     color: "#A1A1AA",
     fontSize: 15,
     lineHeight: 24,
@@ -272,62 +421,51 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     gap: 10,
-    marginBottom: 32,
   },
 
-  statCard: {
-    flex: 1,
-    backgroundColor: "#18181B",
-    borderRadius: 16,
-    paddingVertical: 18,
-    paddingHorizontal: 10,
-    alignItems: "center",
-  },
-
-  statNumber: {
-    color: "#FFFFFF",
-    fontSize: 24,
-    fontWeight: "800",
-    marginBottom: 4,
-  },
-
-  statLabel: {
-    color: "#A1A1AA",
-    fontSize: 12,
-    textAlign: "center",
-  },
-
-  buttonsContainer: {
+  bottomCard: {
     flexDirection: "row",
-    gap: 12,
+    backgroundColor: "#18181B",
+    borderWidth: 1,
+    borderColor: "#27272A",
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 28,
   },
 
-  socialButton: {
-    flex: 1,
-    backgroundColor: "#8B5CF6",
+  bottomIcon: {
+    width: 44,
+    height: 44,
     borderRadius: 14,
-    paddingVertical: 14,
+    backgroundColor: "#8B5CF6",
     alignItems: "center",
+    justifyContent: "center",
+    marginRight: 14,
   },
 
-  socialButtonText: {
+  bottomContent: {
+    flex: 1,
+  },
+
+  bottomTitle: {
     color: "#FFFFFF",
     fontSize: 15,
     fontWeight: "700",
+    marginBottom: 5,
   },
 
-  buttonPressed: {
-    opacity: 0.7,
+  bottomText: {
+    color: "#71717A",
+    fontSize: 13,
+    lineHeight: 20,
   },
 
   footer: {
     alignItems: "center",
-    paddingTop: 10,
   },
 
   footerText: {
-    color: "#52525B",
-    fontSize: 12,
-    textAlign: "center",
+    color: "#3F3F46",
+    fontSize: 11,
   },
 });
