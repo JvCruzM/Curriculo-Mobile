@@ -4,13 +4,15 @@ import { StatusBar } from "expo-status-bar";
 import { Text } from "@/components/Themed";
 import SectionTitle from "@/components/SectionTitle";
 import TechnologyChip from "@/components/TechnologyChip";
+import ScreenState from "@/components/ScreenState";
+
+import { useCurriculum } from "@/context/CurriculumContext";
 
 const technologies = [
   "React Native",
   "Expo",
   "Expo Router",
   "TypeScript",
-  "JavaScript",
   "REST API",
   "Node.js",
   "Express",
@@ -21,6 +23,18 @@ const technologies = [
 ];
 
 export default function SobreScreen() {
+  const { profile, loading, error, reload } = useCurriculum();
+
+  if (loading || error || !profile) {
+    return (
+      <>
+        <StatusBar style="light" />
+
+        <ScreenState loading={loading} error={error} onRetry={reload} />
+      </>
+    );
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -35,17 +49,11 @@ export default function SobreScreen() {
 
           <Text style={styles.title}>Quem sou eu?</Text>
 
-          <Text style={styles.description}>
-            Sou João Vitor Cruz de Menezes, estudante de Sistemas para Internet
-            e profissional com experiência nas áreas de logística e
-            administração.
-          </Text>
+          <Text style={styles.description}>{profile.summary}</Text>
 
-          <Text style={styles.description}>
-            Atualmente estou direcionando minha formação para Tecnologia da
-            Informação, com foco no desenvolvimento de sistemas e soluções
-            digitais.
-          </Text>
+          {profile.location ? (
+            <Text style={styles.location}>{profile.location}</Text>
+          ) : null}
         </View>
 
         <View style={styles.section}>
@@ -54,31 +62,25 @@ export default function SobreScreen() {
             subtitle="Minha trajetória acadêmica até o momento."
           />
 
-          <View style={styles.infoCard}>
-            <Text style={styles.cardTitle}>Sistemas para Internet</Text>
+          {profile.academicExperiences.map((experience) => (
+            <View key={experience.id} style={styles.infoCard}>
+              <Text style={styles.cardDegree}>{experience.degree}</Text>
 
-            <Text style={styles.cardSubtitle}>
-              Universidade Católica de Pernambuco — UNICAP
-            </Text>
+              <Text style={styles.cardTitle}>{experience.course}</Text>
 
-            <Text style={styles.cardPeriod}>2025 — Cursando</Text>
-          </View>
+              <Text style={styles.cardSubtitle}>{experience.institution}</Text>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.cardTitle}>Redes de Computadores</Text>
-
-            <Text style={styles.cardSubtitle}>
-              ETE Professor Lucilo Ávila Pessoa
-            </Text>
-
-            <Text style={styles.cardPeriod}>2020 — 2022</Text>
-          </View>
+              <Text style={styles.cardPeriod}>
+                {formatPeriod(experience.startDate, experience.endDate)}
+              </Text>
+            </View>
+          ))}
         </View>
 
         <View style={styles.section}>
           <SectionTitle
             title="Tecnologias"
-            subtitle="Tecnologias e ferramentas utilizadas neste projeto."
+            subtitle="Tecnologias e ferramentas utilizadas para desenvolver este aplicativo."
           />
 
           <View style={styles.chipsContainer}>
@@ -114,13 +116,28 @@ export default function SobreScreen() {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Este aplicativo utiliza uma API REST própria para carregar as
-            informações do currículo.
+            Informações do currículo carregadas da API REST.
           </Text>
         </View>
       </ScrollView>
     </>
   );
+}
+
+function formatPeriod(startDate: string, endDate: string | null) {
+  const start = formatDate(startDate);
+  const end = endDate ? formatDate(endDate) : "atual";
+
+  return `${start} — ${end}`;
+}
+
+function formatDate(date: string) {
+  const parsedDate = new Date(`${date}T00:00:00`);
+
+  return parsedDate.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 }
 
 const styles = StyleSheet.create({
@@ -158,7 +175,13 @@ const styles = StyleSheet.create({
     color: "#A1A1AA",
     fontSize: 15,
     lineHeight: 24,
-    marginBottom: 12,
+  },
+
+  location: {
+    color: "#8B5CF6",
+    fontSize: 14,
+    fontWeight: "700",
+    marginTop: 12,
   },
 
   section: {
@@ -172,6 +195,15 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     marginBottom: 12,
+  },
+
+  cardDegree: {
+    color: "#8B5CF6",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    marginBottom: 8,
   },
 
   cardTitle: {
@@ -192,6 +224,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "700",
     marginTop: 10,
+    textTransform: "capitalize",
   },
 
   chipsContainer: {

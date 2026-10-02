@@ -4,8 +4,23 @@ import { StatusBar } from "expo-status-bar";
 import { Text } from "@/components/Themed";
 import SectionTitle from "@/components/SectionTitle";
 import ExperienceCard from "@/components/ExperienceCard";
+import ScreenState from "@/components/ScreenState";
+
+import { useCurriculum } from "@/context/CurriculumContext";
 
 export default function ProfissionalScreen() {
+  const { profile, loading, error, reload } = useCurriculum();
+
+  if (loading || error || !profile) {
+    return (
+      <>
+        <StatusBar style="light" />
+
+        <ScreenState loading={loading} error={error} onRetry={reload} />
+      </>
+    );
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -24,21 +39,24 @@ export default function ProfissionalScreen() {
           />
         </View>
 
-        <ExperienceCard
-          type="Experiência profissional"
-          title="Auxiliar de Logística"
-          institution="TRA Distribuidora"
-          period="Maio de 2023 — Setembro de 2025"
-          description="Atuação em rotinas de logística e operações em uma distribuidora de produtos para animais de estimação."
-        />
-
-        <ExperienceCard
-          type="Aprendiz"
-          title="Aprendiz de Rotina Administrativa"
-          institution="FICR"
-          period="Julho de 2026 — Atual"
-          description="Atuação em rotinas administrativas relacionadas ao atendimento e apoio às atividades da instituição."
-        />
+        {profile.professionalExperiences.length > 0 ? (
+          profile.professionalExperiences.map((experience) => (
+            <ExperienceCard
+              key={experience.id}
+              type="Experiência profissional"
+              title={experience.position}
+              institution={experience.company}
+              period={formatPeriod(experience.startDate, experience.endDate)}
+              description={experience.description ?? undefined}
+            />
+          ))
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyTitle}>
+              Nenhuma experiência profissional encontrada.
+            </Text>
+          </View>
+        )}
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -48,6 +66,22 @@ export default function ProfissionalScreen() {
       </ScrollView>
     </>
   );
+}
+
+function formatPeriod(startDate: string, endDate: string | null) {
+  const start = formatDate(startDate);
+  const end = endDate ? formatDate(endDate) : "Atual";
+
+  return `${start} — ${end}`;
+}
+
+function formatDate(date: string) {
+  const parsedDate = new Date(`${date}T00:00:00`);
+
+  return parsedDate.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 }
 
 const styles = StyleSheet.create({
@@ -72,6 +106,21 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 1.5,
     marginBottom: 10,
+  },
+
+  emptyState: {
+    backgroundColor: "#18181B",
+    borderWidth: 1,
+    borderColor: "#27272A",
+    borderRadius: 18,
+    padding: 24,
+    alignItems: "center",
+  },
+
+  emptyTitle: {
+    color: "#A1A1AA",
+    fontSize: 14,
+    textAlign: "center",
   },
 
   footer: {

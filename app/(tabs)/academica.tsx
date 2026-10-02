@@ -1,11 +1,26 @@
-import { ScrollView, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-import { Text } from "@/components/Themed";
-import SectionTitle from "@/components/SectionTitle";
 import ExperienceCard from "@/components/ExperienceCard";
+import ScreenState from "@/components/ScreenState";
+import SectionTitle from "@/components/SectionTitle";
+import { Text } from "@/components/Themed";
+
+import { useCurriculum } from "@/context/CurriculumContext";
 
 export default function AcademicaScreen() {
+  const { profile, loading, error, reload } = useCurriculum();
+
+  if (loading || error || !profile) {
+    return (
+      <>
+        <StatusBar style="light" />
+
+        <ScreenState loading={loading} error={error} onRetry={reload} />
+      </>
+    );
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -24,21 +39,24 @@ export default function AcademicaScreen() {
           />
         </View>
 
-        <ExperienceCard
-          type="Tecnólogo"
-          title="Sistemas para Internet"
-          institution="Universidade Católica de Pernambuco — UNICAP"
-          period="Abril de 2025 — Cursando"
-          description="Formação superior voltada ao desenvolvimento de sistemas, aplicações web e soluções digitais."
-        />
-
-        <ExperienceCard
-          type="Técnico"
-          title="Redes de Computadores"
-          institution="ETE Professor Lucilo Ávila Pessoa"
-          period="Fevereiro de 2020 — Dezembro de 2022"
-          description="Formação técnica com foco em redes de computadores, infraestrutura e fundamentos de tecnologia da informação."
-        />
+        {profile.academicExperiences.length > 0 ? (
+          profile.academicExperiences.map((experience) => (
+            <ExperienceCard
+              key={experience.id}
+              type={experience.degree}
+              title={experience.course}
+              institution={experience.institution}
+              period={formatPeriod(experience.startDate, experience.endDate)}
+              description={experience.description ?? undefined}
+            />
+          ))
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyTitle}>
+              Nenhuma experiência acadêmica encontrada.
+            </Text>
+          </View>
+        )}
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -48,6 +66,22 @@ export default function AcademicaScreen() {
       </ScrollView>
     </>
   );
+}
+
+function formatPeriod(startDate: string, endDate: string | null) {
+  const start = formatDate(startDate);
+  const end = endDate ? formatDate(endDate) : "Atual";
+
+  return `${start} — ${end}`;
+}
+
+function formatDate(date: string) {
+  const parsedDate = new Date(`${date}T00:00:00`);
+
+  return parsedDate.toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 }
 
 const styles = StyleSheet.create({
@@ -72,6 +106,21 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 1.5,
     marginBottom: 10,
+  },
+
+  emptyState: {
+    backgroundColor: "#18181B",
+    borderWidth: 1,
+    borderColor: "#27272A",
+    borderRadius: 18,
+    padding: 24,
+    alignItems: "center",
+  },
+
+  emptyTitle: {
+    color: "#A1A1AA",
+    fontSize: 14,
+    textAlign: "center",
   },
 
   footer: {

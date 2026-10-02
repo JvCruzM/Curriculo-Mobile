@@ -6,62 +6,54 @@ import { Text } from "@/components/Themed";
 import SectionTitle from "@/components/SectionTitle";
 import ProjectCard from "@/components/ProjectCard";
 import TechnologyFilter from "@/components/TechnologyFilter";
+import ScreenState from "@/components/ScreenState";
 
-const projects = [
-  {
-    id: "amigo-ou-inimigo",
-    name: "Amigo ou Inimigo",
-    description:
-      "Aplicação web para realizar sorteios de amigo secreto com uma variação de amigo ou inimigo, utilizando autenticação e envio de resultados por e-mail.",
-    technologies: [
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "Prisma",
-      "Supabase",
-      "Nodemailer",
-      "bcrypt",
-    ],
-    githubUrl: "https://github.com/JvCruzM/Amigo-ou-Inimigo",
-    projectUrl: "https://amigo-ou-inimigo.vercel.app/",
-  },
-  {
-    id: "youseen",
-    name: "YouSeen",
-    description:
-      "Extensão para navegadores baseada em JavaScript que permite ocultar vídeos do YouTube que já foram assistidos.",
-    technologies: [
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "Chrome Extensions API",
-      "Manifest V3",
-    ],
-    githubUrl: "https://github.com/JvCruzM/YouSeen",
-    projectUrl: "https://github.com/JvCruzM/YouSeen",
-  },
-];
+import { useCurriculum } from "@/context/CurriculumContext";
 
 export default function ProjetosScreen() {
+  const { profile, loading, error, reload } = useCurriculum();
+
   const [selectedTechnology, setSelectedTechnology] = useState<string | null>(
     null,
   );
 
   const technologies = useMemo(() => {
-    const allTechnologies = projects.flatMap((project) => project.technologies);
-
-    return [...new Set(allTechnologies)].sort();
-  }, []);
-
-  const filteredProjects = useMemo(() => {
-    if (!selectedTechnology) {
-      return projects;
+    if (!profile) {
+      return [];
     }
 
-    return projects.filter((project) =>
-      project.technologies.includes(selectedTechnology),
+    const allTechnologies = profile.projects.flatMap((project) =>
+      project.technologies.map((technology) => technology.name),
     );
-  }, [selectedTechnology]);
+
+    return [...new Set(allTechnologies)].sort();
+  }, [profile]);
+
+  const filteredProjects = useMemo(() => {
+    if (!profile) {
+      return [];
+    }
+
+    if (!selectedTechnology) {
+      return profile.projects;
+    }
+
+    return profile.projects.filter((project) =>
+      project.technologies.some(
+        (technology) => technology.name === selectedTechnology,
+      ),
+    );
+  }, [profile, selectedTechnology]);
+
+  if (loading || error || !profile) {
+    return (
+      <>
+        <StatusBar style="light" />
+
+        <ScreenState loading={loading} error={error} onRetry={reload} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -84,11 +76,17 @@ export default function ProjetosScreen() {
         <View style={styles.filterSection}>
           <Text style={styles.filterTitle}>Filtrar por tecnologia</Text>
 
-          <TechnologyFilter
-            technologies={technologies}
-            selectedTechnology={selectedTechnology}
-            onSelect={setSelectedTechnology}
-          />
+          {technologies.length > 0 ? (
+            <TechnologyFilter
+              technologies={technologies}
+              selectedTechnology={selectedTechnology}
+              onSelect={setSelectedTechnology}
+            />
+          ) : (
+            <Text style={styles.noTechnologies}>
+              Nenhuma tecnologia encontrada nos projetos.
+            </Text>
+          )}
         </View>
 
         <View>
@@ -98,7 +96,9 @@ export default function ProjetosScreen() {
                 key={project.id}
                 name={project.name}
                 description={project.description}
-                technologies={project.technologies}
+                technologies={project.technologies.map(
+                  (technology) => technology.name,
+                )}
                 githubUrl={project.githubUrl}
                 projectUrl={project.projectUrl}
               />
@@ -157,6 +157,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     marginBottom: 12,
+  },
+
+  noTechnologies: {
+    color: "#71717A",
+    fontSize: 13,
+    marginBottom: 16,
   },
 
   emptyState: {
